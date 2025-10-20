@@ -5495,7 +5495,7 @@ Transform:
   m_GameObject: {fileID: 687977545}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 20, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11091,6 +11091,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteFill: {fileID: 2019896645}
+  sprite: {fileID: 1638197591}
 --- !u!1 &1768680158
 GameObject:
   m_ObjectHideFlags: 0
@@ -11216,10 +11217,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeTextbox: {fileID: 1360368299}
   profitTextbox: {fileID: 1768680160}
-  timePerRound: 30
   patronPrefab: {fileID: 5432465509213107657, guid: a656e941c388a8648ae2c7a060200ced, type: 3}
   patronsObjectParent: {fileID: 687977546}
-  newPatronInterval: 10
 --- !u!1 &2019896644
 GameObject:
   m_ObjectHideFlags: 0

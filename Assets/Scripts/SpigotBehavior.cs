@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class SpigotBehavior : MonoBehaviour
 {
-    [SerializeField] DrinkTypes.TYPE drinkType;
+    [SerializeField] Parameters.DRINK drinkType;
     [SerializeField] private KeyCode keyCode;
     [SerializeField] private ParticleSystem particles;
     //private Coroutine spigotOnCoroutine;
 
-    public static Action<Transform, DrinkTypes.TYPE, bool> OnSpigotStateChange; 
+    public static Action<Transform, Parameters.DRINK, bool> OnSpigotStateChange; 
 
     void Start()
     {
-
+        GetComponentInChildren<SpriteRenderer>().color = Parameters.drinkToColor[drinkType];
     }
 
     void SetSpigotState(bool startPouring) {
@@ -38,7 +38,7 @@ public class SpigotBehavior : MonoBehaviour
 
     void Update()
     {
-        SetSpigotState(Input.GetKey(keyCode));
+        if (Parameters.isGameStart) SetSpigotState(Input.GetKey(keyCode));
         
     }
 }

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -5,9 +6,10 @@ using UnityEngine;
 public class MugBehavior : MonoBehaviour
 {
     [SerializeField] Transform spriteFill;
+    [SerializeField] SpriteRenderer sprite;
     private float fillPercent;
     private Coroutine fillupCoroutine = null;
-    private DrinkTypes.TYPE servedDrinkType;
+    private Parameters.DRINK servedDrinkType;
 
     public static Action<float> OnCustomerServed;
 
@@ -23,7 +25,7 @@ public class MugBehavior : MonoBehaviour
         GameStateManager.OnServeDrink -= ServeCustomer;
     }
 
-    private void UpdateMugPlacement(Transform spigot, DrinkTypes.TYPE drinkType, bool isPouring)
+    private void UpdateMugPlacement(Transform spigot, Parameters.DRINK drinkType, bool isPouring)
     {
         if (isPouring && fillupCoroutine == null) fillupCoroutine = StartCoroutine(MugFill());
         else if (!isPouring && fillupCoroutine != null)
@@ -34,7 +36,9 @@ public class MugBehavior : MonoBehaviour
         Vector2 newPos = (Vector2)spigot.position + Vector2.down * 7;
         if ((Vector2)transform.position != newPos) UpdateFill(0);
         transform.position = newPos;
+
         servedDrinkType = drinkType;
+        sprite.color = Parameters.drinkToColor[servedDrinkType];
     }
 
     IEnumerator MugFill()
@@ -55,7 +59,8 @@ public class MugBehavior : MonoBehaviour
         if (nextPatron.preferredDrink == servedDrinkType) OnCustomerServed.Invoke(20);
         else OnCustomerServed.Invoke(-20);
         UpdateFill(0);
-        Destroy(nextPatron.gameObject);
+
+        nextPatron.LeaveAfterService();
     }
 
     private void UpdateFill(float fill)
