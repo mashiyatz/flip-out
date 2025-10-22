@@ -43,5 +43,11 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Tap
+    uniqueID: 3239409775
+    locked: 0
+  - name: Mug
+    uniqueID: 3241593733
+    locked: 0
   m_RenderingLayers:
   - Default

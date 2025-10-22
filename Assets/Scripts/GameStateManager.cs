@@ -31,7 +31,7 @@ public class GameStateManager : MonoBehaviour
     void UpdateProfit(float increment)
     {
         profit += increment;
-        profitTextbox.text = $"${profit}";
+        profitTextbox.text = $"${profit:N0}";
     }
 
     void Start()
@@ -39,7 +39,7 @@ public class GameStateManager : MonoBehaviour
         profit = Parameters.startCash;
         remainingTimeInRound = Parameters.timePerRound;
         timeTextbox.text = $"{remainingTimeInRound}";
-        profitTextbox.text = $"${profit}";
+        profitTextbox.text = $"${profit:N0}";
         patronQueue = new Queue<PatronBehavior>();
         QueueNewPatron();
 
