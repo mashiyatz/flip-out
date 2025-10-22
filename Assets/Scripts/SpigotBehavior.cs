@@ -13,14 +13,26 @@ public class SpigotBehavior : MonoBehaviour
 
     void Start()
     {
-        GetComponentInChildren<SpriteRenderer>().color = Parameters.drinkToColor[drinkType];
+        //GetComponentInChildren<SpriteRenderer>().color = Parameters.drinkToColor[drinkType];
+    }
+
+    void UpdateSprite(bool isPouring)
+    {
+        transform.GetChild(0).gameObject.SetActive(isPouring);
+        transform.GetChild(1).gameObject.SetActive(!isPouring);
     }
 
     void SetSpigotState(bool startPouring) {
         var em = particles.emission;
-        if (startPouring && !em.enabled) { em.enabled = true; OnSpigotStateChange.Invoke(transform, drinkType, true); }
-        else if (!startPouring && em.enabled) { em.enabled = false; OnSpigotStateChange.Invoke(transform, drinkType, false); }
-        
+        if (startPouring && !em.enabled) { 
+            em.enabled = true; 
+            OnSpigotStateChange.Invoke(transform.GetChild(0), drinkType, true);
+        }
+        else if (!startPouring && em.enabled) { 
+            em.enabled = false; 
+            OnSpigotStateChange.Invoke(transform.GetChild(0), drinkType, false); 
+        }
+        UpdateSprite(startPouring);
     }
 
     // deprecated

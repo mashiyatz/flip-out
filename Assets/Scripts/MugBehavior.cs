@@ -33,7 +33,7 @@ public class MugBehavior : MonoBehaviour
             StopCoroutine(fillupCoroutine);
             fillupCoroutine = null;
         }
-        Vector2 newPos = (Vector2)spigot.position + Vector2.down * 7;
+        Vector2 newPos = (Vector2)spigot.position + Vector2.down * 5 + Vector2.right * 0.5f;
         if ((Vector2)transform.position != newPos) UpdateFill(0);
         transform.position = newPos;
 

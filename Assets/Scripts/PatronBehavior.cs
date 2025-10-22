@@ -25,10 +25,10 @@ public class PatronBehavior : MonoBehaviour
 
         waitSequence = DOTween.Sequence();
         waitSequence.AppendInterval(Parameters.patronWaitTime);
-        waitSequence.Append(transform.DOMoveX(20, 2.5f));
+        //waitSequence.Append(transform.DOMoveX(20, 2.5f));
         waitSequence.AppendCallback(() => {
             Debug.Log("You suck, I'm leaving!");
-            LeaveAfterService();
+            LeaveAfterService(false);
         });
 
         UpdateTransformBySiblingIndex();
@@ -36,14 +36,14 @@ public class PatronBehavior : MonoBehaviour
 
     private void UpdateTransformBySiblingIndex()
     {
-        transform.localScale = 4 * Mathf.Pow(0.95f, transform.GetSiblingIndex()) * Vector2.one;
-        transform.DOMoveX(10 + transform.GetSiblingIndex(), 2.5f);
+        transform.localScale = Mathf.Pow(0.95f, transform.GetSiblingIndex()) * Vector2.one;
+        transform.DOMoveX(7 * transform.GetSiblingIndex(), 2.5f);
     }
 
-    public void LeaveAfterService()
+    public void LeaveAfterService(bool isSatisfied = true)
     {
         waitSequence.Kill();
-        transform.DOScale(0, 1f).OnComplete(() =>
+        transform.DOMoveX(isSatisfied ? -20 : 20, 2.5f).OnComplete(() =>
         {
             transform.SetAsLastSibling();
             OnQueueUpdated.Invoke();
