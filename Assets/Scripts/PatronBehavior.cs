@@ -21,22 +21,25 @@ public class PatronBehavior : MonoBehaviour
 
     void Start()
     {
-        GetComponent<SpriteRenderer>().color = Parameters.drinkToColor[preferredDrink];
-
         waitSequence = DOTween.Sequence();
         waitSequence.AppendInterval(Parameters.patronWaitTime);
-        //waitSequence.Append(transform.DOMoveX(20, 2.5f));
         waitSequence.AppendCallback(() => {
-            Debug.Log("You suck, I'm leaving!");
             LeaveAfterService(false);
         });
 
         UpdateTransformBySiblingIndex();
     }
 
+    public void SetPreferredDrink(Parameters.DRINK drink)
+    {
+        preferredDrink = drink;
+        GetComponent<SpriteRenderer>().color = Parameters.drinkToColor[preferredDrink];
+    }
+
     private void UpdateTransformBySiblingIndex()
     {
         transform.localScale = Mathf.Pow(0.95f, transform.GetSiblingIndex()) * Vector2.one;
+        GetComponent<SpriteRenderer>().sortingOrder = -transform.GetSiblingIndex();
         transform.DOMoveX(7 * transform.GetSiblingIndex(), 2.5f);
     }
 

@@ -7,13 +7,20 @@ public class SpigotBehavior : MonoBehaviour
     [SerializeField] Parameters.DRINK drinkType;
     [SerializeField] private KeyCode keyCode;
     [SerializeField] private ParticleSystem particles;
-    //private Coroutine spigotOnCoroutine;
+    [SerializeField] private float pourRate = 0.25f; // replace with fill rate of individual glass type
+    [SerializeField] private float costPerSec = 1;
+    private Coroutine spigotOnCoroutine;
 
-    public static Action<Transform, Parameters.DRINK, bool> OnSpigotStateChange; 
+    public static Action<Transform, bool> OnSpigotStateChange;
+    public static Action<Parameters.DRINK, float> OnDrinkChange;
+    public static Action<float> OnPour;
 
     void Start()
     {
-        //GetComponentInChildren<SpriteRenderer>().color = Parameters.drinkToColor[drinkType];
+        var em = particles.emission;
+        em.enabled = false;
+        StartCoroutine(SpigotPour());
+        costPerSec = Parameters.drinkToCost[drinkType] * pourRate / 2; // decide better way of pricing
     }
 
     void UpdateSprite(bool isPouring)
@@ -24,33 +31,35 @@ public class SpigotBehavior : MonoBehaviour
 
     void SetSpigotState(bool startPouring) {
         var em = particles.emission;
-        if (startPouring && !em.enabled) { 
-            em.enabled = true; 
-            OnSpigotStateChange.Invoke(transform.GetChild(0), drinkType, true);
-        }
-        else if (!startPouring && em.enabled) { 
-            em.enabled = false; 
-            OnSpigotStateChange.Invoke(transform.GetChild(0), drinkType, false); 
+        if (em.enabled != startPouring)
+        {
+            em.enabled = startPouring;
+            OnSpigotStateChange.Invoke(transform.GetChild(0), startPouring);
+            if (em.enabled) OnDrinkChange.Invoke(drinkType, pourRate);
         }
         UpdateSprite(startPouring);
     }
 
-    // deprecated
-    //IEnumerator SpigotPour()
-    //{
-    //    float pourTime = 0;
-    //    while (true)
-    //    {
-    //        yield return new WaitForSeconds(1.0f);
-    //        pourTime += 1;
-    //        Debug.Log($"pouring for {pourTime}s");
-    //    }
-        
-    //}
+    IEnumerator SpigotPour()
+    {
+        while (true)
+        {
+            if (particles.emission.enabled && Parameters.isGameStart)
+            {
+                OnPour.Invoke(-costPerSec);
+                yield return new WaitForSeconds(1.0f);
+            }
+            yield return null;
+        }
+    }
 
     void Update()
     {
-        if (Parameters.isGameStart) SetSpigotState(Input.GetKey(keyCode));
+        if (Parameters.isGameStart)
+        {
+            SetSpigotState(Input.GetKey(keyCode));
+        }
+
         
     }
 }
