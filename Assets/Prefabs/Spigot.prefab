@@ -4942,3 +4942,4 @@ MonoBehaviour:
   costPerSec: 1
   tapOn: {fileID: 21300000, guid: 8765dbe815799d7429a86674f3f4450d, type: 3}
   tapOff: {fileID: 21300000, guid: b5c49ca1e45ff734b8007be4c046a995, type: 3}
+  mugPrefab: {fileID: 234888524153940090, guid: 44539eb7e79c0ac4e8daaa7945b757f0, type: 3}

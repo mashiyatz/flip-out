@@ -8,8 +8,7 @@ public class PatronBehavior : MonoBehaviour
     [SerializeField] private GameObject speechBubble;
     [SerializeField] private TextMesh textbox;
     public Parameters.DRINK preferredDrink;
-    //private Sequence waitSequence;
-    private Coroutine waitCoroutine;
+    private Coroutine waitCoroutine = null;
 
     public static Action OnQueueUpdated;
 
@@ -28,16 +27,15 @@ public class PatronBehavior : MonoBehaviour
     void Start()
     {
         UpdateTransformBySiblingIndex();
-        waitCoroutine = StartCoroutine(PatronWaiting());
     }
 
     IEnumerator PatronWaiting()
     {
-        while (transform.GetSiblingIndex() > 3) yield return null;
         yield return new WaitForSeconds(Parameters.patronWaitTime);
         textbox.text = "This place\nsucks!";
         yield return new WaitForSeconds(1.0f);
         LeaveAfterService(false);
+        waitCoroutine = null;
     }
 
     public void SetPreferredDrink(Parameters.DRINK drink)
@@ -49,7 +47,6 @@ public class PatronBehavior : MonoBehaviour
 
     private void UpdateTransformBySiblingIndex()
     {
-        //transform.localScale = Mathf.Pow(0.95f, transform.GetSiblingIndex()) * Vector2.one;
         GetComponent<SpriteRenderer>().sortingOrder = -transform.GetSiblingIndex();
         transform.DOMoveX(7 * transform.GetSiblingIndex(), 2.5f).OnComplete(() =>
         {
@@ -57,13 +54,16 @@ public class PatronBehavior : MonoBehaviour
             {
                 speechBubble.SetActive(true);
                 textbox.text = $"I'll have a\n{preferredDrink}!";
+                waitCoroutine ??= StartCoroutine(PatronWaiting());
             }
         });
+
+        
     }
 
     public void LeaveAfterService(bool isSatisfied = true)
     {
-        StopCoroutine(waitCoroutine);
+        if (waitCoroutine != null) StopCoroutine(waitCoroutine);
         speechBubble.SetActive(false);
         transform.DOMoveX(isSatisfied ? -20 : 20, 2.5f).SetEase(Ease.OutQuad).OnComplete(() =>
         {
@@ -72,10 +72,5 @@ public class PatronBehavior : MonoBehaviour
             transform.DOKill();
             Destroy(gameObject);
         });
-    }
-
-    void Update()
-    {
-        
     }
 }

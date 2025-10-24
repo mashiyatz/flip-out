@@ -16,21 +16,17 @@ public class MugBehavior : MonoBehaviour
 
     private void OnEnable()
     {
-        SpigotBehavior.OnSpigotStateChange += UpdateMugPlacement;
-        SpigotBehavior.OnDrinkChange += ChangeFillColor;
         GameStateManager.OnServeDrink += ServeCustomer;
         GameStateManager.OnGameOver += () => { UpdateFill(0); };
     }
 
     private void OnDisable()
     {
-        SpigotBehavior.OnSpigotStateChange -= UpdateMugPlacement;
-        SpigotBehavior.OnDrinkChange -= ChangeFillColor;
         GameStateManager.OnServeDrink -= ServeCustomer;
         GameStateManager.OnGameOver -= () => { UpdateFill(0); };
     }
 
-    private void UpdateMugPlacement(Transform spigot, bool isPouring)
+    public void UpdateMugPlacement(Transform spigot, bool isPouring)
     {
         if (isPouring && fillupCoroutine == null) fillupCoroutine = StartCoroutine(MugFill());
         else if (!isPouring && fillupCoroutine != null)
@@ -38,12 +34,25 @@ public class MugBehavior : MonoBehaviour
             StopCoroutine(fillupCoroutine);
             fillupCoroutine = null;
         }
+
+        // can potentially remove this when doing multiple mugs version
         Vector2 newPos = (Vector2)spigot.position + Vector2.down * 2 + Vector2.right * 0.5f;
         if ((Vector2)transform.position != newPos) UpdateFill(0);
         transform.position = newPos;
     }
 
-    private void ChangeFillColor(Parameters.DRINK drink, float pourRate)
+    public void UpdateMugPlacement(bool isPouring)
+    {
+        if (isPouring && fillupCoroutine == null) fillupCoroutine = StartCoroutine(MugFill());
+        else if (!isPouring && fillupCoroutine != null)
+        {
+            StopCoroutine(fillupCoroutine);
+            fillupCoroutine = null;
+        }
+    }
+
+    // can potentially remove this when doing multiple mugs version
+    public void ChangeFillColor(Parameters.DRINK drink, float pourRate)
     {
         fillRate = pourRate;
         servedDrinkType = drink;
@@ -52,24 +61,21 @@ public class MugBehavior : MonoBehaviour
 
     IEnumerator MugFill()
     {
-        float pourTime = 0;
         while (true)
         {
             yield return new WaitForSeconds(1.0f);
             UpdateFill(fillPercent + fillRate);
-            pourTime += 1;
-            Debug.Log($"pouring for {pourTime}s");
         }
     }
 
-    private void ServeCustomer()
+    public void ServeCustomer()
     {
         PatronBehavior nextPatron = GameStateManager.patronsParentReference.GetChild(0).GetComponent<PatronBehavior>();
-        if (nextPatron.preferredDrink == servedDrinkType && fillPercent == 1) OnCustomerServed.Invoke(20);
-        // else OnCustomerServed.Invoke(-20);
-        UpdateFill(0);
-
-        nextPatron.LeaveAfterService();
+        bool orderFilled = nextPatron.preferredDrink == servedDrinkType && fillPercent == 1;
+        if (orderFilled) OnCustomerServed.Invoke(Parameters.drinkToCost[servedDrinkType]);
+        nextPatron.LeaveAfterService(orderFilled);
+        GameStateManager.activeSpigot = null;
+        Destroy(gameObject);
     }
 
     private void UpdateFill(float fill)

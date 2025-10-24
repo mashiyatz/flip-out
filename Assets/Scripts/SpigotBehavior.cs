@@ -14,10 +14,14 @@ public class SpigotBehavior : MonoBehaviour
     public static Action<Transform, bool> OnSpigotStateChange;
     public static Action<Parameters.DRINK, float> OnDrinkChange;
     public static Action<float> OnPour;
+    public static Action<SpigotBehavior> OnNewActiveSpigot;
 
     [SerializeField] private Sprite tapOn;
     [SerializeField] private Sprite tapOff;
     private SpriteRenderer activeSprite;
+
+    [SerializeField] private GameObject mugPrefab;
+    public GameObject mug = null; 
 
     private void OnEnable()
     {
@@ -49,8 +53,20 @@ public class SpigotBehavior : MonoBehaviour
         if (em.enabled != startPouring)
         {
             em.enabled = startPouring;
-            OnSpigotStateChange.Invoke(transform.GetChild(0), startPouring);
-            if (em.enabled) OnDrinkChange.Invoke(drinkType, pourRate);
+            if (em.enabled)
+            {
+                if (mug == null)
+                {
+                    mug = Instantiate(mugPrefab, transform);
+                    mug.transform.position = (Vector2)transform.GetChild(0).position + Vector2.down * 2 + Vector2.right * 0.5f;
+                }
+            } else
+            {
+                OnNewActiveSpigot.Invoke(this);
+            }
+
+            mug.GetComponent<MugBehavior>().UpdateMugPlacement(startPouring);
+            mug.GetComponent<MugBehavior>().ChangeFillColor(drinkType, pourRate);
         }
         UpdateSprite(startPouring);
     }
