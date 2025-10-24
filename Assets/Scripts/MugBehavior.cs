@@ -19,6 +19,7 @@ public class MugBehavior : MonoBehaviour
         SpigotBehavior.OnSpigotStateChange += UpdateMugPlacement;
         SpigotBehavior.OnDrinkChange += ChangeFillColor;
         GameStateManager.OnServeDrink += ServeCustomer;
+        GameStateManager.OnGameOver += () => { UpdateFill(0); };
     }
 
     private void OnDisable()
@@ -26,6 +27,7 @@ public class MugBehavior : MonoBehaviour
         SpigotBehavior.OnSpigotStateChange -= UpdateMugPlacement;
         SpigotBehavior.OnDrinkChange -= ChangeFillColor;
         GameStateManager.OnServeDrink -= ServeCustomer;
+        GameStateManager.OnGameOver -= () => { UpdateFill(0); };
     }
 
     private void UpdateMugPlacement(Transform spigot, bool isPouring)
@@ -36,7 +38,7 @@ public class MugBehavior : MonoBehaviour
             StopCoroutine(fillupCoroutine);
             fillupCoroutine = null;
         }
-        Vector2 newPos = (Vector2)spigot.position + Vector2.down * 5 + Vector2.right * 0.5f;
+        Vector2 newPos = (Vector2)spigot.position + Vector2.down * 2 + Vector2.right * 0.5f;
         if ((Vector2)transform.position != newPos) UpdateFill(0);
         transform.position = newPos;
     }

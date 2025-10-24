@@ -30,7 +30,8 @@ Transform:
   m_LocalPosition: {x: 0, y: -1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1802949083261626889}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2520974900281208827
@@ -100,4 +101,94 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0f31f80f1718df4b90bbb303751e2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speechBubble: {fileID: 3401221666183085288}
+  textbox: {fileID: 3451708987545713516}
   preferredDrink: 0
+--- !u!1001 &1751322294147443515
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2957961384102457896}
+    m_Modifications:
+    - target: {fileID: 92516187468824882, guid: 0be01a6fcbb83604997cf77ed9f7378d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 6.382241
+      objectReference: {fileID: 0}
+    - target: {fileID: 92516187468824882, guid: 0be01a6fcbb83604997cf77ed9f7378d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.2359288
+      objectReference: {fileID: 0}
+    - target: {fileID: 92516187468824882, guid: 0be01a6fcbb83604997cf77ed9f7378d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 92516187468824882, guid: 0be01a6fcbb83604997cf77ed9f7378d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 92516187468824882, guid: 0be01a6fcbb83604997cf77ed9f7378d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 92516187468824882, guid: 0be01a6fcbb83604997cf77ed9f7378d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 92516187468824882, guid: 0be01a6fcbb83604997cf77ed9f7378d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 92516187468824882, guid: 0be01a6fcbb83604997cf77ed9f7378d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 92516187468824882, guid: 0be01a6fcbb83604997cf77ed9f7378d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 92516187468824882, guid: 0be01a6fcbb83604997cf77ed9f7378d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3998742702636472275, guid: 0be01a6fcbb83604997cf77ed9f7378d, type: 3}
+      propertyPath: m_Name
+      value: SpeechBubble
+      objectReference: {fileID: 0}
+    - target: {fileID: 3998742702636472275, guid: 0be01a6fcbb83604997cf77ed9f7378d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4011332129975570519, guid: 0be01a6fcbb83604997cf77ed9f7378d, type: 3}
+      propertyPath: m_OffsetZ
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4516513620484166332, guid: 0be01a6fcbb83604997cf77ed9f7378d, type: 3}
+      propertyPath: m_SortingLayer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4516513620484166332, guid: 0be01a6fcbb83604997cf77ed9f7378d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0be01a6fcbb83604997cf77ed9f7378d, type: 3}
+--- !u!4 &1802949083261626889 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 92516187468824882, guid: 0be01a6fcbb83604997cf77ed9f7378d, type: 3}
+  m_PrefabInstance: {fileID: 1751322294147443515}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3401221666183085288 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3998742702636472275, guid: 0be01a6fcbb83604997cf77ed9f7378d, type: 3}
+  m_PrefabInstance: {fileID: 1751322294147443515}
+  m_PrefabAsset: {fileID: 0}
+--- !u!102 &3451708987545713516 stripped
+TextMesh:
+  m_CorrespondingSourceObject: {fileID: 4011332129975570519, guid: 0be01a6fcbb83604997cf77ed9f7378d, type: 3}
+  m_PrefabInstance: {fileID: 1751322294147443515}
+  m_PrefabAsset: {fileID: 0}

@@ -15,18 +15,33 @@ public class SpigotBehavior : MonoBehaviour
     public static Action<Parameters.DRINK, float> OnDrinkChange;
     public static Action<float> OnPour;
 
+    [SerializeField] private Sprite tapOn;
+    [SerializeField] private Sprite tapOff;
+    private SpriteRenderer activeSprite;
+
+    private void OnEnable()
+    {
+        GameStateManager.OnGameOver += () => { SetSpigotState(false); };
+    }
+
+    private void OnDisable()
+    {
+        GameStateManager.OnGameOver -= () => { SetSpigotState(false); };
+    }
+
     void Start()
     {
         var em = particles.emission;
         em.enabled = false;
         StartCoroutine(SpigotPour());
         costPerSec = Parameters.drinkToCost[drinkType] * pourRate / 2; // decide better way of pricing
+
+        activeSprite = GetComponent<SpriteRenderer>();
     }
 
     void UpdateSprite(bool isPouring)
     {
-        transform.GetChild(0).gameObject.SetActive(isPouring);
-        transform.GetChild(1).gameObject.SetActive(!isPouring);
+        activeSprite.sprite = isPouring ? tapOn : tapOff; 
     }
 
     void SetSpigotState(bool startPouring) {

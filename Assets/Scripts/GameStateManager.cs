@@ -20,7 +20,9 @@ public class GameStateManager : MonoBehaviour
 
     public static Transform patronsParentReference;
     public static Action OnServeDrink;
+    public static Action OnGameOver;
     private float profit;
+    private float roundStartProfit;
 
     private void OnEnable()
     {
@@ -42,14 +44,14 @@ public class GameStateManager : MonoBehaviour
 
     void Start()
     {
-        profit = Parameters.startCash;
+        profit = roundStartProfit = Parameters.startCash;
         remainingTimeInRound = Parameters.timePerRound;
         timeTextbox.text = $"{remainingTimeInRound}";
         profitTextbox.text = $"${profit:N0}";
 
         patronsParentReference = patronsObjectParent;
         panelObject.SetActive(true);
-        panelTextbox.text = "Press A to clock in!";
+        panelTextbox.text = "Another day, another dollar.";
     }
 
     void QueueNewPatron()
@@ -60,7 +62,6 @@ public class GameStateManager : MonoBehaviour
 
     IEnumerator CreateNewPatronsOverTime()
     {
-        float timer = Parameters.newPatronInterval;
         while (true)
         {
             if (patronsObjectParent.childCount < 5)
@@ -72,17 +73,23 @@ public class GameStateManager : MonoBehaviour
         }
     }
 
+    void StartRound()
+    {
+        Parameters.isGameStart = true;
+        remainingTimeInRound = Parameters.timePerRound;
+        panelObject.SetActive(false);
+        clock.StartTimer();
+        StartCoroutine(CreateNewPatronsOverTime());
+        roundStartProfit = profit;
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
 
-        if (Input.GetKeyDown(KeyCode.A) && !Parameters.isGameStart)
+        if (Input.GetKeyDown(KeyCode.Space) && !Parameters.isGameStart)
         {
-            Parameters.isGameStart = true;
-            remainingTimeInRound = Parameters.timePerRound;
-            panelObject.SetActive(false);
-            clock.StartTimer();
-            StartCoroutine(CreateNewPatronsOverTime());
+            StartRound();
             return;
         }
         if (Parameters.isGameStart) { 
@@ -92,12 +99,13 @@ public class GameStateManager : MonoBehaviour
             {
                 Parameters.isGameStart = false;
                 panelObject.SetActive(true);
-                panelTextbox.text = "Another day another dollar.";
+                panelTextbox.text = $"Net profit: ${(roundStartProfit - profit):N0}\nI hate my job.";
                 clock.StopTimer();
                 StopAllCoroutines();
+                OnGameOver.Invoke();
             }
 
-            if (Input.GetKeyDown(KeyCode.A)) OnServeDrink.Invoke();
+            if (Input.GetKeyDown(KeyCode.Space)) OnServeDrink.Invoke();
         }
     }
 }
